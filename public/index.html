@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aadhif's Wood Pressed Oils — 100% Pure, Coimbatore</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E3;
+    --cream-dark: #EDE6D0;
+    --forest: #1B4332;
+    --forest-mid: #2D6A4F;
+    --forest-light: #40916C;
+    --gold: #B8860B;
+    --gold-light: #DAA520;
+    --gold-bright: #F0C040;
+    --text-dark: #1A1A14;
+    --text-mid: #444438;
+    --text-light: #7A7A62;
+    --white: #FDFAF2;
+    --border: rgba(27,67,50,0.13);
+    --border-hover: rgba(27,67,50,0.28);
+    --wa-green: #25D366;
+    --wa-dark: #075E54;
+    --upi-purple: #5F259F;
+    --upi-purple-dark: #4a1a80;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; }
+
+  .announcement { background: var(--forest); color: var(--cream); text-align: center; padding: 9px 16px; font-size: 12px; letter-spacing: 0.03em; line-height: 1.5; }
+  .announcement span { color: var(--gold-bright); font-weight: 500; }
+
+  header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .header-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+  .logo-mark { width: 40px; height: 40px; background: var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+  .logo-text-block { display: flex; flex-direction: column; line-height: 1.15; }
+  .logo-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--forest); letter-spacing: 0.02em; }
+  .logo-sub { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+
+  nav { display: flex; gap: 26px; align-items: center; }
+  nav a { text-decoration: none; color: var(--text-mid); font-size: 14px; transition: color 0.2s; position: relative; white-space: nowrap; }
+  nav a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1.5px; background: var(--forest); transition: width 0.25s; }
+  nav a:hover { color: var(--forest); }
+  nav a:hover::after { width: 100%; }
+
+  .header-actions { display: flex; align-items: center; gap: 4px; }
+  .search-bar { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--cream); transition: border-color 0.2s; }
+  .search-bar:focus-within { border-color: var(--forest); }
+  .search-bar input { border: none; background: transparent; padding: 8px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text-dark); outline: none; width: 160px; }
+  .search-bar button { background: var(--forest); border: none; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .search-bar button:hover { background: var(--forest-mid); }
+
+  .icon-btn { width: 40px; height: 40px; border-radius: 8px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-mid); transition: background 0.2s, color 0.2s; position: relative; }
+  .icon-btn:hover { background: var(--cream-dark); color: var(--forest); }
+  .cart-count { position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; background: var(--gold); color: white; border-radius: 50%; font-size: 9.5px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+
+  .mobile-menu-btn { display: none; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 8px; background: none; cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 5px; }
+  .mobile-menu-btn span { width: 20px; height: 1.8px; background: var(--text-mid); border-radius: 2px; display: block; }
+
+  .mobile-nav { display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--white); z-index: 300; flex-direction: column; padding: 24px; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+  .mobile-nav-close { width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 8px; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-mid); }
+  .mobile-nav-links { display: flex; flex-direction: column; gap: 4px; }
+  .mobile-nav-links a { text-decoration: none; color: var(--text-dark); font-size: 18px; font-weight: 500; padding: 14px 0; border-bottom: 1px solid var(--border); display: block; transition: color 0.2s; }
+  .mobile-nav-links a:hover { color: var(--forest); }
+  .mobile-nav-contact { margin-top: 32px; padding: 20px; background: var(--cream); border-radius: 12px; }
+  .mobile-nav-contact p { font-size: 13px; color: var(--text-light); margin-bottom: 8px; }
+  .mobile-nav-contact a { display: block; font-size: 18px; font-weight: 600; color: var(--forest); text-decoration: none; }
+  .mobile-nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 299; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .mobile-nav-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* BRAND BANNER */
+  .brand-banner { background: linear-gradient(135deg, #f8f3e2 0%, #f0e8c8 40%, #e8ddb0 100%); border-bottom: 3px solid var(--gold); position: relative; overflow: hidden; }
+  .brand-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 10% 50%, rgba(27,67,50,0.06) 0%, transparent 50%), radial-gradient(circle at 90% 20%, rgba(184,134,11,0.08) 0%, transparent 40%); pointer-events: none; }
+  .brand-banner-inner { max-width: 1280px; margin: 0 auto; padding: 36px 24px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+  .bb-logo-block { text-align: center; }
+  .bb-oil-drop { font-size: 48px; display: block; margin-bottom: 6px; filter: drop-shadow(0 2px 8px rgba(184,134,11,0.3)); }
+  .bb-brand-name { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; color: var(--forest); line-height: 1; margin-bottom: 2px; letter-spacing: -0.01em; }
+  .bb-brand-name em { font-style: italic; color: var(--gold); }
+  .bb-tagline-row { display: flex; align-items: center; gap: 10px; justify-content: center; margin: 6px 0 10px; }
+  .bb-tagline-line { height: 1px; width: 40px; background: var(--gold); }
+  .bb-tagline-text { font-size: 13px; color: var(--text-mid); letter-spacing: 0.06em; font-weight: 500; }
+  .bb-pure-badge { display: inline-block; background: var(--forest); color: var(--gold-bright); font-size: 16px; font-weight: 700; letter-spacing: 0.1em; padding: 6px 22px; border-radius: 30px; border: 2px solid var(--gold); }
+  .bb-products-block { text-align: center; }
+  .bb-products-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .bb-product-pill { background: var(--forest); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 100px; border: 2px solid rgba(240,192,64,0.3); transition: border-color 0.2s, transform 0.2s; cursor: pointer; }
+  .bb-product-pill:hover { border-color: var(--gold-bright); transform: translateY(-3px); }
+  .bb-product-emoji { font-size: 34px; }
+  .bb-product-label { color: var(--cream); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; line-height: 1.2; text-align: center; }
+  .bb-badges-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .bb-info-badge { background: rgba(27,67,50,0.08); border: 1px solid rgba(27,67,50,0.2); color: var(--forest); font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 100px; display: flex; align-items: center; gap: 5px; }
+
+  /* TRUST STRIP */
+  .trust-strip { background: var(--cream-dark); border-bottom: 1px solid var(--border); padding: 12px 20px; overflow-x: auto; }
+  .trust-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px; min-width: 600px; }
+  .trust-item { display: flex; align-items: center; gap: 8px; color: var(--text-mid); font-size: 12.5px; white-space: nowrap; }
+  .trust-icon { width: 26px; height: 26px; background: var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; }
+
+  /* SECTIONS */
+  .section { max-width: 1280px; margin: 0 auto; padding: 52px 24px; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; gap: 16px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 500; color: var(--text-dark); line-height: 1.1; }
+  .section-subtitle { color: var(--text-light); font-size: 13.5px; margin-top: 6px; max-width: 380px; }
+  .view-all { color: var(--forest); font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--forest); padding-bottom: 2px; transition: gap 0.2s; white-space: nowrap; flex-shrink: 0; }
+  .view-all:hover { gap: 10px; }
+
+  /* PRODUCT GRID */
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .product-card { background: var(--white); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s; cursor: pointer; position: relative; }
+  .product-card:hover { box-shadow: 0 12px 40px rgba(27,67,50,0.11); border-color: var(--border-hover); transform: translateY(-3px); }
+  .product-badge-strip { position: absolute; top: 0; left: 0; right: 0; height: 26px; background: var(--forest); display: flex; align-items: center; justify-content: center; color: var(--cream); font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; padding: 0 10px; z-index: 2; white-space: nowrap; overflow: hidden; }
+  .product-img-wrap { background: var(--cream); height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-top: 26px; }
+  .product-emoji { font-size: 72px; position: relative; z-index: 1; transition: transform 0.3s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08)); }
+  .product-card:hover .product-emoji { transform: scale(1.08) translateY(-4px); }
+  .wishlist-btn { position: absolute; top: 34px; right: 10px; width: 30px; height: 30px; background: white; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s, border-color 0.2s; z-index: 3; }
+  .product-card:hover .wishlist-btn { opacity: 1; }
+  .wishlist-btn:hover { border-color: #e53e3e; }
+  .wishlist-btn.active { opacity: 1; background: #fff5f5; border-color: #e53e3e; }
+  .product-info { padding: 14px 14px 16px; }
+  .product-tags { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+  .tag { font-size: 10px; padding: 3px 8px; border-radius: 100px; font-weight: 500; letter-spacing: 0.04em; }
+  .tag-green { background: rgba(27,67,50,0.08); color: var(--forest); }
+  .tag-gold { background: rgba(184,134,11,0.09); color: var(--gold); }
+  .product-name { font-size: 13px; font-weight: 500; color: var(--text-dark); line-height: 1.4; margin-bottom: 5px; }
+  .product-meta { font-size: 11.5px; color: var(--text-light); margin-bottom: 10px; }
+  .product-pricing { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; }
+  .price-current { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--forest); }
+  .price-old { font-size: 12px; color: var(--text-light); text-decoration: line-through; }
+  .price-discount { font-size: 10px; background: rgba(39,110,69,0.1); color: #276E45; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+  .add-to-cart { width: 100%; background: var(--forest); color: var(--cream); border: none; padding: 11px 16px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.15s; letter-spacing: 0.03em; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .add-to-cart:hover { background: var(--forest-light); transform: translateY(-1px); }
+
+  /* PRICE TABLE */
+  .price-table-section { background: var(--cream-dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .price-table-inner { max-width: 1280px; margin: 0 auto; padding: 52px 24px; }
+  .price-table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+  .price-oil-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+  .price-oil-header { background: var(--forest); padding: 16px 18px; display: flex; align-items: center; gap: 12px; }
+  .price-oil-emoji { font-size: 30px; }
+  .price-oil-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); }
+  .price-oil-sub { font-size: 10px; color: rgba(245,240,232,0.55); letter-spacing: 0.06em; text-transform: uppercase; }
+  .price-rows { padding: 0 18px; }
+  .price-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .price-row:last-child { border-bottom: none; }
+  .price-qty { font-size: 13.5px; font-weight: 500; color: var(--text-dark); }
+  .price-amount { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--forest); }
+  .price-add-btn { background: transparent; border: 1.5px solid var(--forest); color: var(--forest); padding: 5px 12px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .price-add-btn:hover { background: var(--forest); color: var(--cream); }
+
+  /* CATEGORIES */
+  .categories-section { background: var(--forest); }
+  .categories-section .section-title { color: var(--cream); }
+  .categories-section .section-subtitle { color: rgba(245,240,232,0.55); }
+  .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .category-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 14px; padding: 22px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: background 0.2s, transform 0.2s; text-decoration: none; }
+  .category-card:hover { background: rgba(255,255,255,0.09); transform: translateX(4px); }
+  .cat-icon { font-size: 34px; flex-shrink: 0; }
+  .cat-name { font-size: 14px; font-weight: 500; color: var(--cream); margin-bottom: 3px; }
+  .cat-count { font-size: 11.5px; color: rgba(245,240,232,0.4); }
+  .cat-arrow { margin-left: auto; color: rgba(245,240,232,0.3); font-size: 16px; transition: color 0.2s, transform 0.2s; flex-shrink: 0; }
+  .category-card:hover .cat-arrow { color: var(--gold-bright); transform: translateX(4px); }
+
+  /* WHY US */
+  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .why-card { padding: 24px 18px; background: var(--white); border-radius: 14px; border: 1px solid var(--border); transition: box-shadow 0.2s; }
+  .why-card:hover { box-shadow: 0 8px 30px rgba(27,67,50,0.07); }
+  .why-icon { width: 44px; height: 44px; background: rgba(27,67,50,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+  .why-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 7px; }
+  .why-desc { font-size: 12.5px; color: var(--text-light); line-height: 1.65; }
+
+  /* FOOTER */
+  footer { background: var(--text-dark); }
+  .footer-main { max-width: 1280px; margin: 0 auto; padding: 52px 24px 36px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+  .footer-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .footer-logo-sub { font-size: 10px; color: var(--gold-light); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .footer-tagline { color: rgba(245,240,232,0.4); font-size: 13px; line-height: 1.65; max-width: 260px; margin-bottom: 18px; }
+  .footer-social { display: flex; gap: 9px; }
+  .social-btn { width: 34px; height: 34px; border: 1px solid rgba(245,240,232,0.12); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,232,0.45); font-size: 13px; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+  .social-btn:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+  .footer-col-title { font-size: 12px; font-weight: 500; color: var(--cream); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 14px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links a { color: rgba(245,240,232,0.42); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-contact-block { display: flex; flex-direction: column; gap: 9px; }
+  .footer-contact-item { display: flex; gap: 8px; align-items: flex-start; color: rgba(245,240,232,0.42); font-size: 13px; }
+  .footer-contact-item strong { color: rgba(245,240,232,0.75); font-weight: 500; }
+  .footer-bottom { border-top: 1px solid rgba(245,240,232,0.07); padding: 18px 24px; max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; color: rgba(245,240,232,0.28); font-size: 12px; flex-wrap: wrap; gap: 8px; }
+
+  /* CART DRAWER */
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 380px; max-width: 100vw; background: var(--white); z-index: 201; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,0,0,0.12); }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); }
+  .cart-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--text-dark); }
+  .close-btn { width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-mid); transition: background 0.2s; }
+  .close-btn:hover { background: var(--cream-dark); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .cart-item { display: flex; gap: 12px; background: var(--cream); border-radius: 10px; padding: 12px; align-items: center; }
+  .cart-item-img { width: 50px; height: 50px; background: var(--cream-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .cart-item-name { font-size: 12.5px; font-weight: 500; color: var(--text-dark); margin-bottom: 3px; }
+  .cart-item-price { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--forest); font-weight: 600; }
+  .cart-item-qty { display: flex; align-items: center; gap: 7px; margin-left: auto; }
+  .qty-btn { width: 26px; height: 26px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; color: var(--text-dark); transition: border-color 0.15s; }
+  .qty-btn:hover { border-color: var(--forest); }
+  .qty-num { font-size: 14px; font-weight: 500; min-width: 18px; text-align: center; }
+  .cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--text-light); text-align: center; gap: 11px; }
+  .cart-empty-icon { font-size: 48px; }
+  .cart-footer { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--white); }
+  .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cart-total-label { font-size: 13px; color: var(--text-mid); }
+  .cart-total-val { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--forest); }
+  .checkout-btn { width: 100%; background: var(--wa-green); color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; letter-spacing: 0.03em; display: flex; align-items: center; justify-content: center; gap: 9px; box-shadow: 0 4px 16px rgba(37,211,102,0.3); }
+  .checkout-btn:hover { background: #1ebe5c; transform: translateY(-1px); }
+  .cart-note { font-size: 11.5px; color: var(--text-light); text-align: center; margin-top: 9px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--forest); color: var(--cream); padding: 12px 20px; border-radius: 10px; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 8px; z-index: 999; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ═══════════════════════════════════════════
+     WHATSAPP ORDER MODAL
+  ═══════════════════════════════════════════ */
+  .wa-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+  .wa-modal-overlay.open { opacity: 1; pointer-events: all; }
+  .wa-modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.22); transform: scale(0.94) translateY(16px); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .wa-modal-overlay.open .wa-modal { transform: scale(1) translateY(0); }
+
+  .wa-modal-header { background: linear-gradient(135deg, var(--wa-dark) 0%, #128C7E 60%, var(--wa-green) 100%); padding: 22px 24px 18px; position: relative; }
+  .wa-modal-close { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: rgba(255,255,255,0.15); border: none; border-radius: 50%; color: white; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .wa-modal-close:hover { background: rgba(255,255,255,0.28); }
+  .wa-modal-brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .wa-modal-brand-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .wa-modal-brand-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #fff; }
+  .wa-modal-brand-sub { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; }
+  .wa-modal-headline { font-size: 13px; color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 7px; margin-top: 4px; }
+  .wa-modal-headline::before { content: ''; width: 6px; height: 6px; background: var(--wa-green); border-radius: 50%; box-shadow: 0 0 0 3px rgba(37,211,102,0.3); flex-shrink: 0; }
+
+  .wa-modal-body { padding: 20px 24px 0; }
+  .wa-order-title { font-size: 12px; font-weight: 600; color: var(--text-light); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .wa-order-items { display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px; }
+  .wa-order-items::-webkit-scrollbar { width: 4px; }
+  .wa-order-items::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
+  .wa-order-item { display: flex; align-items: center; gap: 10px; background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .wa-order-item-emoji { font-size: 22px; flex-shrink: 0; }
+  .wa-order-item-name { flex: 1; font-size: 12.5px; font-weight: 500; color: var(--text-dark); line-height: 1.3; }
+  .wa-order-item-qty { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .wa-order-item-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--forest); flex-shrink: 0; }
+
+  .wa-divider { height: 1px; background: var(--border); margin: 0 0 14px; }
+  .wa-total-row { display: flex; justify-content: space-between; align-items: center; padding: 0 2px; margin-bottom: 16px; }
+  .wa-total-label { font-size: 13px; font-weight: 500; color: var(--text-mid); }
+  .wa-total-val { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--forest); }
+
+  .pay-steps { display: flex; flex-direction: column; gap: 0; background: rgba(37,211,102,0.06); border: 1px solid rgba(37,211,102,0.2); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+  .pay-step { display: flex; align-items: center; gap: 10px; }
+  .pay-step-num { width: 24px; height: 24px; flex-shrink: 0; background: var(--wa-green); color: white; border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .pay-step-text { font-size: 12.5px; color: #075E54; font-weight: 500; line-height: 1.4; }
+  .pay-step-arrow { font-size: 16px; color: rgba(37,211,102,0.5); text-align: center; margin: 4px 0 4px 8px; }
+
+  .wa-modal-footer { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* UPI ID row */
+  .upi-id-row { display: flex; align-items: center; gap: 8px; background: var(--cream); border: 1px solid var(--border); border-radius: 9px; padding: 9px 12px; }
+  .upi-id-label { font-size: 11px; color: var(--text-light); font-weight: 500; flex-shrink: 0; }
+  .upi-id-val { font-size: 13px; font-weight: 600; color: var(--upi-purple); flex: 1; letter-spacing: 0.01em; }
+  .upi-copy-btn { background: var(--upi-purple); color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: background 0.2s; flex-shrink: 0; font-family: 'DM Sans', sans-serif; }
+  .upi-copy-btn:hover { background: var(--upi-purple-dark); }
+  .upi-copy-btn.copied { background: var(--wa-green); }
+
+  /* Section label */
+  .pay-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; margin-top: 2px; }
+
+  /* ── 3-App UPI grid — THE FIX ── */
+  .upi-apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+  .upi-app-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 2px solid transparent; border-radius: 12px; padding: 14px 8px 11px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; color: #fff; }
+  .upi-app-btn:hover { transform: translateY(-3px); }
+  .upi-app-btn .app-emoji { font-size: 26px; line-height: 1; }
+  .upi-app-btn .app-name { font-size: 12px; font-weight: 700; letter-spacing: 0.03em; }
+
+  .btn-gpay    { background: linear-gradient(135deg, #1a73e8 0%, #0d5dbf 100%); box-shadow: 0 3px 10px rgba(26,115,232,0.35); }
+  .btn-phonepe { background: linear-gradient(135deg, #5f259f 0%, #4a1a80 100%); box-shadow: 0 3px 10px rgba(95,37,159,0.35); }
+  .btn-paytm   { background: linear-gradient(135deg, #00BAF2 0%, #0099cc 100%); box-shadow: 0 3px 10px rgba(0,186,242,0.35); }
+  .btn-gpay:hover    { box-shadow: 0 7px 20px rgba(26,115,232,0.45); }
+  .btn-phonepe:hover { box-shadow: 0 7px 20px rgba(95,37,159,0.45); }
+  .btn-paytm:hover   { box-shadow: 0 7px 20px rgba(0,186,242,0.45); }
+
+  .pay-hint { font-size: 11px; color: var(--text-light); text-align: center; line-height: 1.5; }
+
+  /* OR divider */
+  .pay-or-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0; color: var(--text-light); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .pay-or-divider::before, .pay-or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* WhatsApp send button */
+  .wa-send-btn { width: 100%; background: var(--wa-green); color: #fff; border: none; padding: 15px 20px; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; letter-spacing: 0.03em; box-shadow: 0 4px 18px rgba(37,211,102,0.35); }
+  .wa-send-btn:hover { background: #1ebe5c; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.45); }
+  .wa-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex-shrink: 0; }
+
+  .wa-cancel-btn { width: 100%; background: transparent; color: var(--text-light); border: 1px solid var(--border); padding: 11px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: border-color 0.2s, color 0.2s; letter-spacing: 0.02em; }
+  .wa-cancel-btn:hover { border-color: var(--border-hover); color: var(--text-dark); }
+
+  /* IMAGE HERO */
+  .hero-banner-img { border-bottom: 3px solid var(--gold); background: #1a1a0f; overflow: hidden; }
+  .hero-img-wrap { position: relative; max-width: 1280px; margin: 0 auto; display: block; }
+  .hero-poster-img { width: 100%; height: auto; display: block; max-height: 520px; object-fit: cover; }
+  .hero-img-overlay { position: absolute; bottom: 28px; right: 40px; display: flex; gap: 12px; align-items: center; }
+  .hero-shop-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--forest); color: var(--cream); text-decoration: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.05em; padding: 12px 24px; border-radius: 10px; border: 2px solid var(--gold); transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 18px rgba(0,0,0,0.25); }
+  .hero-shop-btn:hover { background: var(--forest-mid); transform: translateY(-2px); }
+  .hero-price-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--gold); color: var(--forest); text-decoration: none; font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: 0.04em; padding: 12px 20px; border-radius: 10px; transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 18px rgba(0,0,0,0.2); }
+  .hero-price-btn:hover { background: var(--gold-bright); transform: translateY(-2px); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1200px) { .product-grid { grid-template-columns: repeat(2, 1fr); } .why-grid { grid-template-columns: repeat(2, 1fr); } .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  @media (max-width: 960px) { nav { display: none; } .search-bar { display: none; } .mobile-menu-btn { display: flex; } .header-inner { padding: 0 16px; } .brand-banner-inner { grid-template-columns: 1fr; text-align: center; gap: 24px; } .bb-brand-name { font-size: 40px; } .bb-products-row { justify-content: center; } .categories-grid { grid-template-columns: repeat(2, 1fr); } .price-table-grid { grid-template-columns: 1fr; } .section { padding: 40px 20px; } .section-title { font-size: 32px; } }
+  @media (max-width: 640px) { .announcement { font-size: 11px; padding: 8px 12px; } .header-inner { height: 58px; padding: 0 14px; } .logo-name { font-size: 19px; } .logo-mark { width: 36px; height: 36px; font-size: 18px; } .bb-brand-name { font-size: 34px; } .bb-product-pill { min-width: 84px; padding: 12px 10px; } .bb-product-emoji { font-size: 28px; } .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .product-img-wrap { height: 145px; } .product-emoji { font-size: 52px; } .price-old { display: none; } .add-to-cart { font-size: 11.5px; padding: 9px 8px; } .price-table-inner { padding: 36px 16px; } .section { padding: 36px 16px; } .section-title { font-size: 28px; } .section-header { flex-direction: column; align-items: flex-start; margin-bottom: 22px; } .categories-grid { grid-template-columns: 1fr; gap: 10px; } .why-grid { grid-template-columns: 1fr; gap: 12px; } .footer-main { grid-template-columns: 1fr; gap: 28px; padding: 36px 16px 24px; } .footer-bottom { padding: 16px; flex-direction: column; text-align: center; } .cart-drawer { width: 100%; } .toast { bottom: 16px; font-size: 12.5px; max-width: calc(100vw - 32px); white-space: normal; text-align: center; justify-content: center; } .hero-poster-img { max-height: 260px; object-position: left center; } .hero-img-overlay { bottom: 12px; right: 12px; gap: 8px; flex-direction: column; align-items: flex-end; } .hero-shop-btn { font-size: 12px; padding: 9px 16px; } .hero-price-btn { font-size: 11.5px; padding: 9px 14px; } .wa-modal { border-radius: 16px; } .wa-modal-header { padding: 18px 18px 14px; } .wa-modal-body { padding: 16px 18px 0; } .wa-modal-footer { padding: 0 18px 20px; } .upi-apps-grid { gap: 7px; } .upi-app-btn { padding: 11px 6px 9px; } .upi-app-btn .app-emoji { font-size: 22px; } .upi-app-btn .app-name { font-size: 11px; } }
+  @media (max-width: 380px) { .bb-brand-name { font-size: 28px; } .section-title { font-size: 24px; } }
+</style>
+</head>
+<body>
+
+<div class="announcement">
+  🌿 Free delivery across Tamil Nadu · Retail &amp; Wholesale available ·
+  <span>Call: 9500887900</span>
+</div>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">💧</div>
+      <div class="logo-text-block">
+        <span class="logo-name">Aadhif's</span>
+        <span class="logo-sub">Wood Pressed Oils</span>
+      </div>
+    </a>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#prices">Price List</a>
+      <a href="#">Wholesale</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search-bar">
+        <input type="text" placeholder="Search oils...">
+        <button><svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+      </div>
+      <button class="icon-btn" id="cartBtn" aria-label="Open cart">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="mobile-menu-btn" id="menuBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-header">
+    <div class="logo">
+      <div class="logo-mark">💧</div>
+      <div class="logo-text-block">
+        <span class="logo-name" style="color:var(--forest);">Aadhif's</span>
+        <span class="logo-sub">Wood Pressed Oils</span>
+      </div>
+    </div>
+    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  </div>
+  <div class="mobile-nav-links">
+    <a href="#" onclick="closeMobileNav()">Home</a>
+    <a href="#products" onclick="closeMobileNav()">Shop</a>
+    <a href="#prices" onclick="closeMobileNav()">Price List</a>
+    <a href="#" onclick="closeMobileNav()">Wholesale</a>
+    <a href="#" onclick="closeMobileNav()">Contact</a>
+  </div>
+  <div class="mobile-nav-contact">
+    <p>Call / WhatsApp</p>
+    <a href="tel:9500887900">📞 9500887900</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero-banner-img">
+  <div class="hero-img-wrap">
+    <div class="hero-img-overlay">
+      <a href="#products" class="hero-shop-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Shop Now
+      </a>
+      <a href="#prices" class="hero-price-btn">View Price List →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND BANNER -->
+<section class="brand-banner">
+  <div class="brand-banner-inner">
+    <div class="bb-logo-block">
+      <span class="bb-oil-drop">💧</span>
+      <div class="bb-brand-name"><em>Aadhif's</em></div>
+      <div class="bb-tagline-row">
+        <div class="bb-tagline-line"></div>
+        <span class="bb-tagline-text">Wood Pressed Oils</span>
+        <div class="bb-tagline-line"></div>
+      </div>
+      <div class="bb-pure-badge">100% PURE</div>
+    </div>
+    <div class="bb-products-block">
+      <div class="bb-products-row">
+        <div class="bb-product-pill"><span class="bb-product-emoji">🥜</span><span class="bb-product-label">Groundnut<br>Oil</span></div>
+        <div class="bb-product-pill"><span class="bb-product-emoji">🌿</span><span class="bb-product-label">Sesame<br>Oil</span></div>
+        <div class="bb-product-pill"><span class="bb-product-emoji">🥥</span><span class="bb-product-label">Coconut<br>Oil</span></div>
+        <div class="bb-product-pill"><span class="bb-product-emoji">🫙</span><span class="bb-product-label">Pure<br>Ghee</span></div>
+      </div>
+      <div class="bb-badges-row">
+        <span class="bb-info-badge">✅ 100% Veg</span>
+        <span class="bb-info-badge">🏭 FSSAI Certified</span>
+        <span class="bb-info-badge">🏛️ MSME Registered</span>
+        <span class="bb-info-badge">🚚 Ships All Over TN</span>
+        <span class="bb-info-badge">🛒 Retail &amp; Wholesale</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <div class="trust-item"><div class="trust-icon">✅</div> 100% Cold-Pressed</div>
+    <div class="trust-item"><div class="trust-icon">🌿</div> No Additives</div>
+    <div class="trust-item"><div class="trust-icon">🏭</div> FSSAI Certified</div>
+    <div class="trust-item"><div class="trust-icon">🚚</div> Ships Across Tamil Nadu</div>
+    <div class="trust-item"><div class="trust-icon">🛒</div> Retail &amp; Wholesale</div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Our Oils</h2>
+        <p class="section-subtitle">Wood-pressed the traditional way — pure, unrefined, and full of natural goodness.</p>
+      </div>
+      <a href="#prices" class="view-all">See full price list →</a>
+    </div>
+    <div class="product-grid">
+      <div class="product-card" data-name="Groundnut Oil 1L" data-price="299" data-emoji="🥜">
+        <div class="product-badge-strip">GROUNDNUT OIL · WOOD PRESSED</div>
+        <div class="product-img-wrap" style="background:#FDF5E0;">
+          <span class="product-emoji">🥜</span>
+          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Wishlist"><svg width="14" height="14" fill="none" stroke="#e53e3e" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <div class="product-tags"><span class="tag tag-green">Wood Pressed</span><span class="tag tag-gold">No Additives</span></div>
+          <div class="product-name">Groundnut / Peanut Oil — Cold Pressed</div>
+          <div class="product-meta">1 Litre · Chekku / Ghani method</div>
+          <div class="product-pricing"><span class="price-current">₹299</span><span class="price-old">₹350</span><span class="price-discount">15% off</span></div>
+          <button class="add-to-cart" onclick="addToCart(this)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Add to cart</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Gingelly Oil 1L" data-price="420" data-emoji="🌿">
+        <div class="product-badge-strip">SESAME OIL · GINGELLY · WOOD PRESSED</div>
+        <div class="product-img-wrap" style="background:#FDF3E0;">
+          <span class="product-emoji">🌿</span>
+          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Wishlist"><svg width="14" height="14" fill="none" stroke="#e53e3e" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <div class="product-tags"><span class="tag tag-green">Cold Pressed</span><span class="tag tag-green">Pure</span></div>
+          <div class="product-name">Sesame / Gingelly Oil — Wood Pressed</div>
+          <div class="product-meta">1 Litre · Traditional extraction</div>
+          <div class="product-pricing"><span class="price-current">₹420</span><span class="price-old">₹490</span><span class="price-discount">14% off</span></div>
+          <button class="add-to-cart" onclick="addToCart(this)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Add to cart</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Coconut Oil 1L" data-price="450" data-emoji="🥥">
+        <div class="product-badge-strip">COCONUT OIL · COLD PRESSED · PURE</div>
+        <div class="product-img-wrap" style="background:#EEF8F0;">
+          <span class="product-emoji">🥥</span>
+          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Wishlist"><svg width="14" height="14" fill="none" stroke="#e53e3e" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <div class="product-tags"><span class="tag tag-green">Cold Pressed</span><span class="tag tag-gold">100% Pure</span></div>
+          <div class="product-name">Coconut Oil — Cold Pressed Unrefined</div>
+          <div class="product-meta">1 Litre · Virgin / Chekku</div>
+          <div class="product-pricing"><span class="price-current">₹450</span><span class="price-old">₹520</span><span class="price-discount">13% off</span></div>
+          <button class="add-to-cart" onclick="addToCart(this)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Add to cart</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Pure Desi Ghee 500ml" data-price="699" data-emoji="🫙">
+        <div class="product-badge-strip">PURE DESI GHEE · A2 · TRADITIONAL</div>
+        <div class="product-img-wrap" style="background:#FFF8E7;">
+          <span class="product-emoji">🫙</span>
+          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Wishlist"><svg width="14" height="14" fill="none" stroke="#e53e3e" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          <div style="position:absolute;top:10px;left:10px;background:var(--gold);color:var(--forest);font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:0.05em;z-index:3;">NEW</div>
+        </div>
+        <div class="product-info">
+          <div class="product-tags"><span class="tag tag-gold">A2 Milk</span><span class="tag tag-green">Bilona Method</span></div>
+          <div class="product-name">Pure Desi Ghee — Traditional Bilona Process</div>
+          <div class="product-meta">500 ml · Hand-churned from curd</div>
+          <div class="product-pricing"><span class="price-current">₹699</span><span class="price-old">₹799</span><span class="price-discount">12% off</span></div>
+          <button class="add-to-cart" onclick="addToCart(this)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Add to cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE TABLE -->
+<section class="price-table-section" id="prices">
+  <div class="price-table-inner">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Price List</h2>
+        <p class="section-subtitle">Transparent pricing — all sizes, all oils. Call for bulk / wholesale rates.</p>
+      </div>
+    </div>
+    <div class="price-table-grid">
+      <div class="price-oil-card">
+        <div class="price-oil-header"><span class="price-oil-emoji">🥜</span><div><div class="price-oil-name">Groundnut Oil</div><div class="price-oil-sub">Cold Pressed · Chekku</div></div></div>
+        <div class="price-rows">
+          <div class="price-row"><span class="price-qty">500 ml</span><span class="price-amount">₹159</span><button class="price-add-btn" onclick="addByName('Groundnut Oil 500ml',159,'🥜')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">1 Litre</span><span class="price-amount">₹299</span><button class="price-add-btn" onclick="addByName('Groundnut Oil 1L',299,'🥜')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">2 Litres</span><span class="price-amount">₹580</span><button class="price-add-btn" onclick="addByName('Groundnut Oil 2L',580,'🥜')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">5 Litres</span><span class="price-amount">₹1,400</span><button class="price-add-btn" onclick="addByName('Groundnut Oil 5L',1400,'🥜')">+ Add</button></div>
+        </div>
+      </div>
+      <div class="price-oil-card">
+        <div class="price-oil-header"><span class="price-oil-emoji">🌿</span><div><div class="price-oil-name">Gingelly Oil</div><div class="price-oil-sub">Sesame / Til · Wood Pressed</div></div></div>
+        <div class="price-rows">
+          <div class="price-row"><span class="price-qty">500 ml</span><span class="price-amount">₹219</span><button class="price-add-btn" onclick="addByName('Gingelly Oil 500ml',219,'🌿')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">1 Litre</span><span class="price-amount">₹420</span><button class="price-add-btn" onclick="addByName('Gingelly Oil 1L',420,'🌿')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">2 Litres</span><span class="price-amount">₹820</span><button class="price-add-btn" onclick="addByName('Gingelly Oil 2L',820,'🌿')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">5 Litres</span><span class="price-amount">₹2,000</span><button class="price-add-btn" onclick="addByName('Gingelly Oil 5L',2000,'🌿')">+ Add</button></div>
+        </div>
+      </div>
+      <div class="price-oil-card">
+        <div class="price-oil-header"><span class="price-oil-emoji">🥥</span><div><div class="price-oil-name">Coconut Oil</div><div class="price-oil-sub">Cold Pressed · Unrefined</div></div></div>
+        <div class="price-rows">
+          <div class="price-row"><span class="price-qty">500 ml</span><span class="price-amount">₹239</span><button class="price-add-btn" onclick="addByName('Coconut Oil 500ml',239,'🥥')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">1 Litre</span><span class="price-amount">₹450</span><button class="price-add-btn" onclick="addByName('Coconut Oil 1L',450,'🥥')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">2 Litres</span><span class="price-amount">₹880</span><button class="price-add-btn" onclick="addByName('Coconut Oil 2L',880,'🥥')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">5 Litres</span><span class="price-amount">₹2,150</span><button class="price-add-btn" onclick="addByName('Coconut Oil 5L',2150,'🥥')">+ Add</button></div>
+        </div>
+      </div>
+      <div class="price-oil-card" style="grid-column:1/-1;max-width:440px;">
+        <div class="price-oil-header"><span class="price-oil-emoji">🫙</span><div><div class="price-oil-name">Pure Desi Ghee</div><div class="price-oil-sub">A2 Milk · Bilona Method</div></div></div>
+        <div class="price-rows">
+          <div class="price-row"><span class="price-qty">250 ml</span><span class="price-amount">₹369</span><button class="price-add-btn" onclick="addByName('Pure Ghee 250ml',369,'🫙')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">500 ml</span><span class="price-amount">₹699</span><button class="price-add-btn" onclick="addByName('Pure Ghee 500ml',699,'🫙')">+ Add</button></div>
+          <div class="price-row"><span class="price-qty">1 Litre</span><span class="price-amount">₹1,349</span><button class="price-add-btn" onclick="addByName('Pure Ghee 1L',1349,'🫙')">+ Add</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories-section">
+  <div class="section">
+    <div class="section-header">
+      <div><h2 class="section-title">Shop by category</h2><p class="section-subtitle">Pure oils and ghee for cooking, skin, hair, and more.</p></div>
+    </div>
+    <div class="categories-grid">
+      <a href="#" class="category-card"><span class="cat-icon">🥜</span><div><div class="cat-name">Groundnut Oils</div><div class="cat-count">500ml · 1L · 2L · 5L</div></div><span class="cat-arrow">→</span></a>
+      <a href="#" class="category-card"><span class="cat-icon">🌿</span><div><div class="cat-name">Sesame / Gingelly</div><div class="cat-count">500ml · 1L · 2L · 5L</div></div><span class="cat-arrow">→</span></a>
+      <a href="#" class="category-card"><span class="cat-icon">🥥</span><div><div class="cat-name">Coconut Oils</div><div class="cat-count">500ml · 1L · 2L · 5L</div></div><span class="cat-arrow">→</span></a>
+      <a href="#" class="category-card"><span class="cat-icon">🫙</span><div><div class="cat-name">Pure Desi Ghee</div><div class="cat-count">250ml · 500ml · 1L</div></div><span class="cat-arrow">→</span></a>
+      <a href="#" class="category-card"><span class="cat-icon">📦</span><div><div class="cat-name">Wholesale / Bulk</div><div class="cat-count">10L · 15L · Custom</div></div><span class="cat-arrow">→</span></a>
+      <a href="#" class="category-card"><span class="cat-icon">🚚</span><div><div class="cat-name">Shipping Across TN</div><div class="cat-count">All districts covered</div></div><span class="cat-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section>
+  <div class="section">
+    <div class="section-header">
+      <div><h2 class="section-title">Why Aadhif's?</h2><p class="section-subtitle">Every drop is pressed with care and tradition.</p></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">🪵</div><div class="why-title">Traditional Wood Press</div><p class="why-desc">Slow-pressed on a wooden chekku mill at room temperature — preserving full aroma, nutrients, and natural colour.</p></div>
+      <div class="why-card"><div class="why-icon">🌱</div><div class="why-title">Zero Additives</div><p class="why-desc">No preservatives, no chemicals, no refining. Just pure oil from seed to bottle.</p></div>
+      <div class="why-card"><div class="why-icon">🏭</div><div class="why-title">FSSAI &amp; MSME Certified</div><p class="why-desc">Govt. certified, quality tested. FSSAI #12426003001014. Safe for your family.</p></div>
+      <div class="why-card"><div class="why-icon">🚚</div><div class="why-title">All Over Tamil Nadu</div><p class="why-desc">We ship across all districts of Tamil Nadu. Bulk and retail orders both welcome.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="footer-logo-name">Aadhif's</div>
+      <div class="footer-logo-sub">Wood Pressed Oils</div>
+      <p class="footer-tagline">100% pure, traditionally wood-pressed oils and ghee from Coimbatore. No additives, no chemicals — just pure goodness for your family.</p>
+      <div class="footer-social">
+        <div class="social-btn" title="WhatsApp">💬</div>
+        <div class="social-btn" title="Instagram">📸</div>
+        <div class="social-btn" title="Facebook">👤</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Our Products</div>
+      <ul class="footer-links">
+        <li><a href="#">Groundnut Oil</a></li><li><a href="#">Gingelly / Sesame Oil</a></li>
+        <li><a href="#">Coconut Oil</a></li><li><a href="#">Pure Desi Ghee</a></li>
+        <li><a href="#">Wholesale Orders</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li><li><a href="#">FSSAI Certificate</a></li>
+        <li><a href="#">MSME Registration</a></li><li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <div class="footer-contact-block">
+        <div class="footer-contact-item">📞 <span><strong>9500887900</strong></span></div>
+        <div class="footer-contact-item">✉️ <span>aadhifshomemade<br>@gmail.com</span></div>
+        <div class="footer-contact-item">📍 <span>Velandipalayam,<br>Coimbatore 641025</span></div>
+        <div class="footer-contact-item">🕐 <span>Mon–Sat: 9am – 7pm</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Aadhif's Wood Pressed Oils, Coimbatore. All rights reserved.</span>
+    <span>FSSAI: 12426003001014 · MSME Registered</span>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Your cart</span>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <span class="cart-empty-icon">🛒</span>
+      <div style="font-size:15px;font-weight:500;color:var(--text-mid);">Your cart is empty</div>
+      <div style="font-size:13px;">Add some pure oils!</div>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cartTotal">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="openWaModal()">
+      <svg class="wa-icon" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Order via WhatsApp
+    </button>
+    <p class="cart-note">🚚 Free shipping across Tamil Nadu on orders above ₹499</p>
+  </div>
+</div>
+
+<!-- WA MODAL -->
+<div class="wa-modal-overlay" id="waModalOverlay" onclick="closeWaModalOnOverlay(event)">
+  <div class="wa-modal" id="waModal">
+    <div class="wa-modal-header">
+      <button class="wa-modal-close" onclick="closeWaModal()">✕</button>
+      <div class="wa-modal-brand-row">
+        <div class="wa-modal-brand-icon">💧</div>
+        <div>
+          <div class="wa-modal-brand-name">Aadhif's</div>
+          <div class="wa-modal-brand-sub">WOOD PRESSED OILS · COIMBATORE</div>
+        </div>
+      </div>
+      <div class="wa-modal-headline">Pay via UPI, then confirm order on WhatsApp</div>
+    </div>
+    <div class="wa-modal-body">
+      <div class="wa-order-title">Order Summary</div>
+      <div class="wa-order-items" id="waOrderItems"></div>
+      <div class="wa-divider"></div>
+      <div class="wa-total-row">
+        <span class="wa-total-label">Total Amount</span>
+        <span class="wa-total-val" id="waTotalVal">₹0</span>
+      </div>
+      <div class="pay-steps">
+        <div class="pay-step"><div class="pay-step-num">1</div><div class="pay-step-text">Tap GPay, PhonePe, or Paytm below to pay — each opens its own app directly</div></div>
+        <div class="pay-step-arrow">↓</div>
+        <div class="pay-step"><div class="pay-step-num">2</div><div class="pay-step-text">Send your order + payment screenshot on WhatsApp</div></div>
+      </div>
+    </div>
+    <div class="wa-modal-footer">
+      <!-- UPI ID row -->
+      <div class="upi-id-row">
+        <span class="upi-id-label">UPI ID:</span>
+        <span class="upi-id-val">8925387731@upi</span>
+        <button class="upi-copy-btn" onclick="copyUpiId()" id="upiCopyBtn">Copy</button>
+      </div>
+
+      <!-- Step 1: 3 app buttons -->
+      <div class="pay-section-label">Step 1 — Pay ₹<span id="upiAmountSpan">0</span> via your UPI app</div>
+      <div class="upi-apps-grid">
+        <button class="upi-app-btn btn-gpay" onclick="openGPay()">
+          <span class="app-emoji">🔵</span>
+          <span class="app-name">GPay</span>
+        </button>
+        <button class="upi-app-btn btn-phonepe" onclick="openPhonePe()">
+          <span class="app-emoji">💜</span>
+          <span class="app-name">PhonePe</span>
+        </button>
+        <button class="upi-app-btn btn-paytm" onclick="openPaytm()">
+          <span class="app-emoji">🔷</span>
+          <span class="app-name">Paytm</span>
+        </button>
+      </div>
+      <p class="pay-hint">Each button opens that app directly using its own URL scheme — bypassing any cross-app restrictions.</p>
+
+      <div class="pay-or-divider"><span>then</span></div>
+
+      <!-- Step 2: WhatsApp button -->
+      <div class="pay-section-label">Step 2 — Confirm on WhatsApp</div>
+      <button class="wa-send-btn" onclick="sendWhatsAppOrder()">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Send Order + Screenshot on WhatsApp
+      </button>
+      <button class="wa-cancel-btn" onclick="closeWaModal()">Cancel — go back to cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" fill="none" stroke="#F0C040" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  <span id="toastMsg">Added to cart!</span>
+</div>
+
+<script src="/script-integration.js"></script>
+
+</body>
+</html>
