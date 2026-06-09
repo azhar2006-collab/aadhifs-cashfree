@@ -74,9 +74,11 @@ function renderCart() {
     }
     return;
   }
+console.log("emptyEl =", emptyEl);
+console.log("footerEl =", footerEl);
 
-  emptyEl.style.display = 'none';
-  footerEl.style.display = '';
+if (emptyEl) emptyEl.style.display = 'none';
+if (footerEl) footerEl.style.display = '';
 
   const sub      = calcSubtotal();
   const shipping = calcShipping(sub);
