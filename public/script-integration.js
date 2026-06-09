@@ -61,6 +61,12 @@ function renderCart() {
   const countEl  = document.getElementById('cartCount');
   const totalEl  = document.getElementById('cartTotal');
 
+  console.log("itemsEl =", itemsEl);
+  console.log("emptyEl =", emptyEl);
+  console.log("footerEl =", footerEl);
+  console.log("countEl =", countEl);
+  console.log("totalEl =", totalEl);
+
   const totalQty = cart.reduce((s, i) => s + i.qty, 0);
   countEl.textContent = totalQty;
 
