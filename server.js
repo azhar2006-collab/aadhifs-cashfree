@@ -2,6 +2,7 @@
 //  Aadhif's Wood Pressed Oils
 //  Cashfree Payment + WhatsApp Notification
 // ═══════════════════════════════════════════════
+const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 const express = require('express');
@@ -13,6 +14,16 @@ const fs      = require('fs');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: EMAIL_USER,
+    pass: EMAIL_PASS
+  }
+});
 
 // ── Cashfree Config ───────────────────────────
 const CF_APP_ID   = process.env.CASHFREE_APP_ID;
@@ -282,6 +293,25 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
       if (order) {
         order.paymentId = event.data.payment.cf_payment_id;
         await sendWhatsAppNotification(order);
+        await transporter.sendMail({
+  from: EMAIL_USER,
+  to: 'aadhifshomemade@gmail.com',
+  subject: `New Paid Order - ${order.orderId}`,
+  text: `
+Order ID: ${order.orderId}
+
+Customer Name: ${order.customer.name}
+Phone: ${order.customer.phone}
+Address: ${order.customer.address}
+Pincode: ${order.customer.pincode}
+
+Total Amount: ₹${order.total}
+
+Payment ID: ${order.paymentId}
+
+Payment Status: PAID
+`
+});
         delete pendingOrders[orderId];
         console.log(`✅ Payment confirmed via webhook for order ${orderId}`);
       }
