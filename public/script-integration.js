@@ -120,12 +120,13 @@ if (footerEl) footerEl.style.display = '';
     ? '<span style="color:var(--forest);font-size:12px;font-weight:500;">🚚 FREE shipping</span>'
     : `<span style="font-size:13px;color:var(--text-mid);">Shipping: ₹${shipping}</span>`;
 
-totalEl.innerHTML = `
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-    ${shippingLine}
-  </div>
-  ₹${total.toLocaleString('en-IN')}
-`;
+if (totalEl) {
+  totalEl.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      ${shippingLine}
+    </div>
+    ₹${total.toLocaleString('en-IN')}
+  `;
 }
 }
 // ── Cart open/close ──────────────────────────────────────────
