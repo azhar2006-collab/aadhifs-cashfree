@@ -16,12 +16,18 @@ function addToCart(btn) {
 }
 
 function addByName(name, price, emoji) {
+  console.log("ADDING:", name, price);
+
   const existing = cart.find(i => i.name === name);
+
   if (existing) {
     existing.qty++;
   } else {
     cart.push({ name, price, emoji, qty: 1 });
   }
+
+  console.log("CART:", cart);
+
   renderCart();
   openCart();
   showToast('✅ Added — ' + name);
