@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════
 //  Aadhif's Wood Pressed Oils
-//  Cashfree Payment + WhatsApp Notification
+//  Cashfree Payment + WhatsApp Notification (CallMeBot)
 // ═══════════════════════════════════════════════
 
 require('dotenv').config();
@@ -22,8 +22,16 @@ const CF_BASE_URL = CF_ENV === 'PROD'
   ? 'https://api.cashfree.com/pg'
   : 'https://sandbox.cashfree.com/pg';
 
+// ── CallMeBot Config ──────────────────────────
+// Uses OWNER_WHATSAPP from your existing .env (e.g. 918925387731)
+// Add CALLMEBOT_API_KEY to .env after activating:
+//   1. Save +34 611 08 28 80 in contacts
+//   2. Send: I allow callmebot to send me messages
+//   3. Paste the key you receive into CALLMEBOT_API_KEY
+const OWNER_WHATSAPP    = process.env.OWNER_WHATSAPP;   // from your .env
+const CALLMEBOT_API_KEY = process.env.CALLMEBOT_API_KEY; // new key to add
+
 // ── In-memory pending orders store ────────────
-// (declared early so all routes can access it)
 const pendingOrders = {};
 
 // ── Middleware ────────────────────────────────
@@ -32,11 +40,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Inject cf-env meta tag into index.html ────
-// This tells the frontend JS which Cashfree mode to use (sandbox vs production)
 app.get('/', (req, res) => {
   const htmlPath = path.join(__dirname, 'public', 'index.html');
   let html = fs.readFileSync(htmlPath, 'utf8');
-  // Inject meta tag right after <head>
   html = html.replace(
     '<head>',
     `<head>\n<meta name="cf-env" content="${CF_ENV}">`
@@ -76,43 +82,82 @@ function generateOrderId() {
 }
 
 // ── Build WhatsApp Message ────────────────────
-function buildWhatsAppMessage(order) {
+function buildWhatsAppMessage(order, paymentStatus = 'CONFIRMED') {
   const now  = new Date();
   const date = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   const time = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-  let msg = `🌿 *New Order — Aadhif's Wood Pressed Oils*\n`;
-  msg += `─────────────────────────\n`;
+  const isPaid      = paymentStatus === 'CONFIRMED';
+  const statusIcon  = isPaid ? '✅' : '❌';
+  const statusLabel = isPaid ? 'PAID ✅' : 'NOT PAID ❌';
+
+  let msg = `🌿 *New Order - Aadhif's Wood Pressed Oils*\n`;
+  msg += `---------------------------------\n`;
   msg += `🆔 Order ID: *${order.orderId}*\n`;
-  msg += `📅 ${date} 🕐 ${time}\n`;
-  msg += `─────────────────────────\n`;
-  msg += `👤 *Customer Details:*\n`;
+  msg += `📅 ${date}  🕐 ${time}\n`;
+  msg += `---------------------------------\n`;
+  msg += `👤 *Customer Details*\n`;
   msg += `Name: ${order.customer.name}\n`;
   msg += `Phone: ${order.customer.phone}\n`;
   msg += `Address: ${order.customer.address}\n`;
   msg += `Pincode: ${order.customer.pincode}\n`;
-  msg += `─────────────────────────\n`;
-  msg += `🛒 *Order Details:*\n\n`;
+  msg += `---------------------------------\n`;
+  msg += `🛒 *Order Items*\n\n`;
 
   order.items.forEach((item, i) => {
     msg += `${i + 1}. ${item.emoji || '🛢️'} *${item.name}*\n`;
-    msg += `   Qty: ${item.qty} × ₹${item.price} = *₹${item.price * item.qty}*\n\n`;
+    msg += `   Qty: ${item.qty} x Rs.${item.price} = *Rs.${item.price * item.qty}*\n\n`;
   });
 
-  msg += `─────────────────────────\n`;
-  if (order.shipping > 0) {
-    msg += `🚚 Shipping: ₹${order.shipping}\n`;
-  } else {
-    msg += `🚚 Shipping: *FREE* ✅\n`;
+  msg += `---------------------------------\n`;
+  msg += order.shipping > 0
+    ? `🚚 Shipping: Rs.${order.shipping}\n`
+    : `🚚 Shipping: *FREE* ✅\n`;
+  msg += `💰 *Total: Rs.${order.total}*\n`;
+  msg += `---------------------------------\n`;
+  msg += `${statusIcon} *Payment Status: ${statusLabel}*\n`;
+  if (order.paymentId) {
+    msg += `🔐 Payment ID: ${order.paymentId}\n`;
   }
-  msg += `💰 *Total Paid: ₹${order.total}*\n`;
-  msg += `─────────────────────────\n`;
-  msg += `✅ *Payment Status: CONFIRMED*\n`;
-  msg += `🔐 Payment ID: ${order.paymentId}\n`;
-  msg += `─────────────────────────\n`;
-  msg += `_Please ship at the earliest. Thank you!_ 🙏`;
+  msg += `---------------------------------\n`;
+  msg += isPaid
+    ? `Please ship at the earliest. Thank you! 🙏`
+    : `Payment not completed. Follow up if needed. ⚠️`;
 
   return msg;
+}
+
+// ════════════════════════════════════════════════
+//  Send WhatsApp via CallMeBot
+// ════════════════════════════════════════════════
+async function sendWhatsAppNotification(order, paymentStatus = 'CONFIRMED') {
+  try {
+    if (!CALLMEBOT_API_KEY) {
+      console.warn('⚠️  CALLMEBOT_API_KEY not set — skipping WhatsApp notification.');
+      return;
+    }
+    if (!OWNER_WHATSAPP) {
+      console.warn('⚠️  OWNER_WHATSAPP not set — skipping WhatsApp notification.');
+      return;
+    }
+
+    const message = buildWhatsAppMessage(order, paymentStatus);
+
+    await axios.get('https://api.callmebot.com/whatsapp.php', {
+      params: {
+        phone:  OWNER_WHATSAPP,
+        text:   message,
+        apikey: CALLMEBOT_API_KEY,
+      },
+      timeout: 10000,
+    });
+
+    console.log(`📲 WhatsApp sent to +${OWNER_WHATSAPP} | Status: ${paymentStatus} | Order: ${order.orderId}`);
+
+  } catch (err) {
+    console.error('❌ WhatsApp notification failed:', err.response?.data || err.message);
+    // Don't throw — payment is confirmed, notification is best-effort
+  }
 }
 
 // ════════════════════════════════════════════════
@@ -123,12 +168,10 @@ app.post('/api/create-order', async (req, res) => {
   try {
     const { items, customer } = req.body;
 
-    // Validate customer details
     if (!customer?.name || !customer?.phone || !customer?.address || !customer?.pincode) {
       return res.status(400).json({ success: false, message: 'Please fill all customer details' });
     }
 
-    // Validate & recalculate prices server-side
     if (!items || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Cart is empty' });
     }
@@ -144,7 +187,6 @@ app.post('/api/create-order', async (req, res) => {
     const total    = subtotal + shipping;
     const orderId  = generateOrderId();
 
-    // Create order on Cashfree
     const cfResponse = await axios.post(
       `${CF_BASE_URL}/orders`,
       {
@@ -175,7 +217,6 @@ app.post('/api/create-order', async (req, res) => {
 
     const { payment_session_id } = cfResponse.data;
 
-    // Store order temporarily in memory (for webhook lookup)
     pendingOrders[orderId] = {
       orderId,
       items: sanitisedItems,
@@ -187,14 +228,9 @@ app.post('/api/create-order', async (req, res) => {
       createdAt: new Date().toISOString(),
     };
 
-    console.log(`📦 Order created: ${orderId} — ₹${total}`);
+    console.log(`📦 Order created: ${orderId} — Rs.${total}`);
 
-    res.json({
-      success: true,
-      orderId,
-      paymentSessionId: payment_session_id,
-      total,
-    });
+    res.json({ success: true, orderId, paymentSessionId: payment_session_id, total });
 
   } catch (err) {
     console.error('Create order error:', err.response?.data || err.message);
@@ -210,7 +246,6 @@ app.post('/api/verify-payment', async (req, res) => {
   try {
     const { orderId } = req.body;
 
-    // Check payment status on Cashfree
     const cfResponse = await axios.get(
       `${CF_BASE_URL}/orders/${orderId}/payments`,
       {
@@ -226,18 +261,20 @@ app.post('/api/verify-payment', async (req, res) => {
     const successPayment = payments.find(p => p.payment_status === 'SUCCESS');
 
     if (!successPayment) {
+      // Notify owner: payment failed
+      const order = pendingOrders[orderId];
+      if (order) {
+        await sendWhatsAppNotification(order, 'NOT PAID');
+        delete pendingOrders[orderId];
+      }
       return res.json({ success: false, message: 'Payment not completed yet' });
     }
 
-    // Get order details
     const order = pendingOrders[orderId];
     if (order) {
       order.paymentId = successPayment.cf_payment_id;
-
-      // Send WhatsApp notification to owner
-      await sendWhatsAppNotification(order);
-
-      // Clean up
+      // Notify owner: payment confirmed
+      await sendWhatsAppNotification(order, 'CONFIRMED');
       delete pendingOrders[orderId];
     }
 
@@ -252,7 +289,6 @@ app.post('/api/verify-payment', async (req, res) => {
 // ════════════════════════════════════════════════
 //  API 3: Cashfree Webhook
 //  POST /api/webhook
-//  Cashfree calls this automatically on payment
 // ════════════════════════════════════════════════
 app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   try {
@@ -260,7 +296,6 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
     const signature = req.headers['x-webhook-signature'];
     const timestamp = req.headers['x-webhook-timestamp'];
 
-    // Verify webhook signature
     const signedPayload = timestamp + rawBody;
     const expectedSig   = crypto
       .createHmac('sha256', CF_SECRET)
@@ -278,12 +313,21 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
     if (event.type === 'PAYMENT_SUCCESS_WEBHOOK') {
       const orderId = event.data.order.order_id;
       const order   = pendingOrders[orderId];
-
       if (order) {
         order.paymentId = event.data.payment.cf_payment_id;
-        await sendWhatsAppNotification(order);
+        await sendWhatsAppNotification(order, 'CONFIRMED');
         delete pendingOrders[orderId];
-        console.log(`✅ Payment confirmed via webhook for order ${orderId}`);
+        console.log(`✅ Payment confirmed via webhook: ${orderId}`);
+      }
+    }
+
+    if (event.type === 'PAYMENT_FAILED_WEBHOOK') {
+      const orderId = event.data.order.order_id;
+      const order   = pendingOrders[orderId];
+      if (order) {
+        await sendWhatsAppNotification(order, 'NOT PAID');
+        delete pendingOrders[orderId];
+        console.log(`❌ Payment failed via webhook: ${orderId}`);
       }
     }
 
@@ -295,21 +339,6 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
   }
 });
 
-// ════════════════════════════════════════════════
-//  WhatsApp Notification
-// ════════════════════════════════════════════════
-async function sendWhatsAppNotification(order) {
-  try {
-    const message = buildWhatsAppMessage(order);
-    const waUrl   = `https://api.whatsapp.com/send?phone=${process.env.OWNER_WHATSAPP}&text=${encodeURIComponent(message)}`;
-    console.log(`📲 WhatsApp notification ready for order ${order.orderId}`);
-    console.log(`   WA Link: ${waUrl}`);
-    // Note: This logs the link. For auto-sending, integrate WhatsApp Business API.
-  } catch (err) {
-    console.error('WhatsApp notification error:', err.message);
-  }
-}
-
 // ── Payment Success Page ──────────────────────
 app.get('/payment-success', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'success.html'));
@@ -318,9 +347,11 @@ app.get('/payment-success', (req, res) => {
 // ── Health Check ──────────────────────────────
 app.get('/health', (req, res) => {
   res.json({
-    status: 'ok',
-    business: process.env.BUSINESS_NAME,
-    cashfree_env: CF_ENV,
+    status:          'ok',
+    business:        process.env.BUSINESS_NAME,
+    cashfree_env:    CF_ENV,
+    whatsapp_to:     OWNER_WHATSAPP,
+    callmebot_ready: !!CALLMEBOT_API_KEY,
   });
 });
 
@@ -336,6 +367,7 @@ app.listen(PORT, () => {
 ║   🌿 Aadhif's Wood Pressed Oils          ║
 ║   Running on http://localhost:${PORT}        ║
 ║   Cashfree: ${CF_ENV} MODE                   ║
+║   WhatsApp → +${OWNER_WHATSAPP}  ║
 ╚═══════════════════════════════════════════╝
   `);
 });
