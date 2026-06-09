@@ -68,18 +68,28 @@ function renderCart() {
   console.log("totalEl =", totalEl);
 
   const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-  countEl.textContent = totalQty;
-
+ if (countEl) countEl.textContent = totalQty;
+  
+console.log({
+  itemsEl,
+  emptyEl,
+  footerEl,
+  countEl,
+  totalEl,
+  cartLength: cart.length
+});
+  
   if (cart.length === 0) {
-    emptyEl.style.display = '';
-    footerEl.style.display = 'none';
-    // Only append if it's not already inside itemsEl
-    if (!itemsEl.contains(emptyEl)) {
-      itemsEl.innerHTML = '';
-      itemsEl.appendChild(emptyEl);
-    }
-    return;
+  if (emptyEl) emptyEl.style.display = '';
+  if (footerEl) footerEl.style.display = 'none';
+
+  if (itemsEl && emptyEl && !itemsEl.contains(emptyEl)) {
+    itemsEl.innerHTML = '';
+    itemsEl.appendChild(emptyEl);
   }
+
+  return;
+}
 console.log("emptyEl =", emptyEl);
 console.log("footerEl =", footerEl);
 
@@ -110,14 +120,9 @@ if (footerEl) footerEl.style.display = '';
     ? '<span style="color:var(--forest);font-size:12px;font-weight:500;">🚚 FREE shipping</span>'
     : `<span style="font-size:13px;color:var(--text-mid);">Shipping: ₹${shipping}</span>`;
 
-  totalEl.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-      ${shippingLine}
-    </div>
-    ₹${total.toLocaleString('en-IN')}
-  `;
+if (totalEl) {
+  totalEl.innerHTML = ...
 }
-
 // ── Cart open/close ──────────────────────────────────────────
 function openCart() {
   document.getElementById('cartOverlay').classList.add('open');
