@@ -1,9 +1,8 @@
 // ═══════════════════════════════════════════════════════════
-//  Aadhif's Wood Pressed Oils — Cashfree Payment Integration
-//  Drop this file as: public/script-integration.js
+//  Aadhif's Wood Pressed Oils — script-integration.js
 // ═══════════════════════════════════════════════════════════
 
-// ── Cart State ───────────────────────────────────────────────
+// ── Cart State (single declaration) ─────────────────────────
 let cart = [];
 
 // ── Cart helpers ─────────────────────────────────────────────
@@ -16,18 +15,12 @@ function addToCart(btn) {
 }
 
 function addByName(name, price, emoji) {
-  console.log("ADDING:", name, price);
-
   const existing = cart.find(i => i.name === name);
-
   if (existing) {
     existing.qty++;
   } else {
     cart.push({ name, price, emoji, qty: 1 });
   }
-
-  console.log("CART:", cart);
-
   renderCart();
   openCart();
   showToast('✅ Added — ' + name);
@@ -64,13 +57,10 @@ function renderCart() {
   countEl.textContent = totalQty;
 
   if (cart.length === 0) {
+    itemsEl.innerHTML = '';
+    itemsEl.appendChild(emptyEl);
     emptyEl.style.display = '';
     footerEl.style.display = 'none';
-    // Only append if it's not already inside itemsEl
-    if (!itemsEl.contains(emptyEl)) {
-      itemsEl.innerHTML = '';
-      itemsEl.appendChild(emptyEl);
-    }
     return;
   }
 
@@ -81,7 +71,6 @@ function renderCart() {
   const shipping = calcShipping(sub);
   const total    = sub + shipping;
 
-  // Build items HTML without touching emptyEl
   itemsEl.innerHTML = cart.map((item, i) => `
     <div class="cart-item">
       <div class="cart-item-img">${item.emoji}</div>
@@ -97,7 +86,7 @@ function renderCart() {
     </div>
   `).join('');
 
-  let shippingLine = shipping === 0
+  const shippingLine = shipping === 0
     ? '<span style="color:var(--forest);font-size:12px;font-weight:500;">🚚 FREE shipping</span>'
     : `<span style="font-size:13px;color:var(--text-mid);">Shipping: ₹${shipping}</span>`;
 
@@ -109,20 +98,20 @@ function renderCart() {
   `;
 }
 
-// ── Cart open/close ──────────────────────────────────────────
+// ── Cart open / close ────────────────────────────────────────
 function openCart() {
   document.getElementById('cartOverlay').classList.add('open');
   document.getElementById('cartDrawer').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
 function closeCart() {
   document.getElementById('cartOverlay').classList.remove('open');
   document.getElementById('cartDrawer').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-const cartBtn = document.getElementById('cartBtn');
-if (cartBtn) cartBtn.addEventListener('click', openCart);
+document.getElementById('cartBtn').addEventListener('click', openCart);
 
 // ── Mobile nav ───────────────────────────────────────────────
 function closeMobileNav() {
@@ -131,21 +120,20 @@ function closeMobileNav() {
   document.body.style.overflow = '';
 }
 
-const menuBtn = document.getElementById('menuBtn');
-if (menuBtn) {
-  menuBtn.addEventListener('click', () => {
-    document.getElementById('mobileNav').classList.add('open');
-    document.getElementById('mobileNavOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  });
-}
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.getElementById('mobileNavOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
 
 // ── Toast ────────────────────────────────────────────────────
+let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // ── Wishlist toggle ──────────────────────────────────────────
@@ -155,7 +143,7 @@ function toggleWish(btn) {
 }
 
 // ════════════════════════════════════════════════════════════
-//  CASHFREE PAYMENT FLOW
+//  CHECKOUT — Customer details modal + Cashfree payment
 // ════════════════════════════════════════════════════════════
 
 function injectCustomerModal() {
@@ -221,8 +209,8 @@ function injectCustomerModal() {
     }
     .cf-form-group { margin-bottom: 16px; }
     .cf-label {
-      display: block; font-size: 12px; font-weight: 600;
-      color: #444438; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;
+      display: block; font-size: 12px; font-weight: 600; color: #444438;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;
     }
     .cf-label span { color: #e53e3e; }
     .cf-input, .cf-textarea {
@@ -239,23 +227,23 @@ function injectCustomerModal() {
     .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .cf-error-msg { font-size: 11.5px; color: #e53e3e; margin-top: 4px; display: none; }
     .cf-pay-btn {
-      width: 100%; background: #1B4332; color: #F5F0E3;
-      border: none; padding: 15px 20px; border-radius: 12px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      gap: 10px; transition: background 0.2s, transform 0.15s;
-      letter-spacing: 0.03em; box-shadow: 0 4px 18px rgba(27,67,50,0.3); margin-top: 4px;
+      width: 100%; background: #1B4332; color: #F5F0E3; border: none;
+      padding: 15px 20px; border-radius: 12px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.2s, transform 0.15s; letter-spacing: 0.03em;
+      box-shadow: 0 4px 18px rgba(27,67,50,0.3); margin-top: 4px;
     }
     .cf-pay-btn:hover:not(:disabled) { background: #2D6A4F; transform: translateY(-2px); }
     .cf-pay-btn:disabled { background: #888; cursor: not-allowed; transform: none; box-shadow: none; }
     .cf-pay-btn .spinner {
       width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.35);
-      border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite;
+      border-top-color: #fff; border-radius: 50%; animation: cfSpin 0.7s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes cfSpin { to { transform: rotate(360deg); } }
     .cf-secure-note {
-      font-size: 11.5px; color: #7A7A62; text-align: center;
-      margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;
+      font-size: 11.5px; color: #7A7A62; text-align: center; margin-top: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
     }
     .cf-cancel-btn {
       width: 100%; background: transparent; color: #7A7A62;
@@ -270,6 +258,7 @@ function injectCustomerModal() {
       .cf-header { padding: 18px 18px 14px; }
     }
   </style>
+
   <div class="cf-overlay" id="cfCustomerModal" onclick="closeCfModalOnOverlay(event)">
     <div class="cf-modal">
       <div class="cf-header">
@@ -320,12 +309,12 @@ function injectCustomerModal() {
         <button class="cf-cancel-btn" onclick="closeCfModal()">← Back to cart</button>
       </div>
     </div>
-  </div>
-  `;
+  </div>`;
 
   document.body.insertAdjacentHTML('beforeend', html);
 }
 
+// ── openWaModal is called by the HTML checkout button ────────
 function openWaModal() {
   if (cart.length === 0) {
     showToast('🛒 Your cart is empty!');
@@ -354,7 +343,7 @@ function populateCfSummary() {
     : `<div class="cf-summary-item"><span>🚚 Shipping</span><span>₹${shipping}</span></div>`;
 
   document.getElementById('cfSummaryItems').innerHTML = itemsHtml + shippingLine;
-  document.getElementById('cfTotalVal').textContent   = '₹' + total.toLocaleString('en-IN');
+  document.getElementById('cfTotalVal').textContent = '₹' + total.toLocaleString('en-IN');
   document.getElementById('cfPayBtnAmount').textContent = total.toLocaleString('en-IN');
 }
 
@@ -368,7 +357,6 @@ function closeCfModalOnOverlay(e) {
   if (e.target.id === 'cfCustomerModal') closeCfModal();
 }
 
-// ── Form validation ──────────────────────────────────────────
 function validateCfForm() {
   let valid = true;
   const fields = [
@@ -388,7 +376,6 @@ function validateCfForm() {
   return valid;
 }
 
-// ── Initiate Cashfree Payment ────────────────────────────────
 async function initiateCashfreePayment() {
   if (!validateCfForm()) return;
 
@@ -404,18 +391,13 @@ async function initiateCashfreePayment() {
     email:   document.getElementById('cfEmail').value.trim(),
   };
 
-  const items = cart.map(i => ({
-    name:  i.name,
-    qty:   i.qty,
-    price: i.price,
-    emoji: i.emoji,
-  }));
+  const items = cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, emoji: i.emoji }));
 
   try {
-    const createRes = await fetch('/api/create-order', {
-      method:  'POST',
+    const createRes  = await fetch('/api/create-order', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ items, customer }),
+      body: JSON.stringify({ items, customer }),
     });
     const createData = await createRes.json();
     if (!createData.success) throw new Error(createData.message || 'Order creation failed');
@@ -444,7 +426,7 @@ function loadCashfreeSDK() {
   return new Promise((resolve, reject) => {
     if (window.Cashfree) { resolve(); return; }
     const script = document.createElement('script');
-    script.src     = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+    script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
     script.onload  = resolve;
     script.onerror = () => reject(new Error('Failed to load payment SDK'));
     document.head.appendChild(script);
@@ -458,9 +440,9 @@ function getCashfreeMode() {
 
 async function verifyPayment(orderId, customer, total) {
   const verifyRes  = await fetch('/api/verify-payment', {
-    method:  'POST',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ orderId }),
+    body: JSON.stringify({ orderId }),
   });
   const verifyData = await verifyRes.json();
 
@@ -475,45 +457,42 @@ async function verifyPayment(orderId, customer, total) {
   }
 }
 
-// ── Success Screen ───────────────────────────────────────────
 function showPaymentSuccess(orderId, name, total, paymentId) {
   const existing = document.getElementById('cfSuccessOverlay');
   if (existing) existing.remove();
 
-  const html = `
+  document.body.insertAdjacentHTML('beforeend', `
   <style>
     .cf-success-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       z-index: 800; display: flex; align-items: center; justify-content: center;
-      padding: 16px; backdrop-filter: blur(6px); animation: fadeIn 0.3s ease;
+      padding: 16px; backdrop-filter: blur(6px); animation: csFadeIn 0.3s ease;
     }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes csFadeIn { from { opacity:0; } to { opacity:1; } }
     .cf-success-modal {
-      background: #FDFAF2; border-radius: 20px; width: 100%;
-      max-width: 400px; padding: 36px 28px; text-align: center;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-      animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1);
+      background: #FDFAF2; border-radius: 20px; width: 100%; max-width: 400px;
+      padding: 36px 28px; text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+      animation: csSlideUp 0.35s cubic-bezier(0.4,0,0.2,1);
     }
-    @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes csSlideUp { from { transform:translateY(24px);opacity:0; } to { transform:translateY(0);opacity:1; } }
     .cf-success-tick { font-size: 56px; margin-bottom: 12px; }
-    .cf-success-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: #1B4332; margin-bottom: 8px; }
-    .cf-success-msg { font-size: 14px; color: #444438; line-height: 1.6; margin-bottom: 20px; }
-    .cf-success-details { background: rgba(27,67,50,0.06); border-radius: 10px; padding: 14px 16px; margin-bottom: 22px; text-align: left; }
-    .cf-success-detail-row { display: flex; justify-content: space-between; font-size: 13px; color: #444438; padding: 4px 0; }
-    .cf-success-detail-row span:last-child { font-weight: 600; color: #1B4332; }
+    .cf-success-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:#1B4332; margin-bottom:8px; }
+    .cf-success-msg { font-size:14px; color:#444438; line-height:1.6; margin-bottom:20px; }
+    .cf-success-details { background:rgba(27,67,50,0.06); border-radius:10px; padding:14px 16px; margin-bottom:22px; text-align:left; }
+    .cf-success-detail-row { display:flex; justify-content:space-between; font-size:13px; color:#444438; padding:4px 0; }
+    .cf-success-detail-row span:last-child { font-weight:600; color:#1B4332; }
     .cf-success-wa-btn {
-      width: 100%; background: #25D366; color: #fff; border: none;
-      padding: 14px; border-radius: 12px; font-family: 'DM Sans', sans-serif;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 9px;
-      box-shadow: 0 4px 18px rgba(37,211,102,0.35); margin-bottom: 10px;
-      transition: background 0.2s, transform 0.15s;
+      width:100%; background:#25D366; color:#fff; border:none; padding:14px;
+      border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px;
+      box-shadow:0 4px 18px rgba(37,211,102,0.35); margin-bottom:10px;
+      transition:background 0.2s,transform 0.15s;
     }
-    .cf-success-wa-btn:hover { background: #1ebe5c; transform: translateY(-1px); }
+    .cf-success-wa-btn:hover { background:#1ebe5c; transform:translateY(-1px); }
     .cf-success-close-btn {
-      width: 100%; background: transparent; color: #7A7A62;
-      border: 1px solid rgba(27,67,50,0.18); padding: 11px; border-radius: 10px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer;
+      width:100%; background:transparent; color:#7A7A62;
+      border:1px solid rgba(27,67,50,0.18); padding:11px; border-radius:10px;
+      font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer;
     }
   </style>
   <div class="cf-success-overlay" id="cfSuccessOverlay">
@@ -530,7 +509,7 @@ function showPaymentSuccess(orderId, name, total, paymentId) {
         <div class="cf-success-detail-row"><span>Payment ID</span><span>${paymentId || '—'}</span></div>
         <div class="cf-success-detail-row"><span>Amount Paid</span><span>₹${Number(total).toLocaleString('en-IN')}</span></div>
       </div>
-      <button class="cf-success-wa-btn" onclick="openWhatsAppConfirm('${orderId}', '${name}', ${total})">
+      <button class="cf-success-wa-btn" onclick="openWhatsAppConfirm('${orderId}','${name}',${total})">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
         Chat with us on WhatsApp
       </button>
@@ -538,10 +517,7 @@ function showPaymentSuccess(orderId, name, total, paymentId) {
         Continue Shopping
       </button>
     </div>
-  </div>
-  `;
-
-  document.body.insertAdjacentHTML('beforeend', html);
+  </div>`);
 }
 
 function openWhatsAppConfirm(orderId, name, total) {
@@ -551,7 +527,7 @@ function openWhatsAppConfirm(orderId, name, total) {
   window.open(`https://wa.me/919500887900?text=${msg}`, '_blank');
 }
 
-// ── Stub out old WA modal functions (no longer used) ─────────
+// ── Stub out old WA modal functions (HTML still references them) ──
 function closeWaModal() {}
 function closeWaModalOnOverlay() {}
 function copyUpiId() {}
