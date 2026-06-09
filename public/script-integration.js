@@ -34,9 +34,16 @@ function addByName(name, price, emoji) {
   showToast('✅ Added — ' + name);
 }
 
+
 function changeQty(index, delta) {
+  if (!cart[index]) return;
+
   cart[index].qty += delta;
-  if (cart[index].qty <= 0) cart.splice(index, 1);
+
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+
   renderCart();
 }
 
