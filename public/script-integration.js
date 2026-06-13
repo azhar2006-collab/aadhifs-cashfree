@@ -4,7 +4,7 @@
 //  Drop this file as: public/script-integration.js
 // ═══════════════════════════════════════════════════════════
 
-// ── Cart State ───────────────────────────────────────────────
+// ── Cart State ───────────────────────────t────────────────────
 let cart = [];
 
 // ── Cart helpers ─────────────────────────────────────────────
@@ -380,13 +380,10 @@ function populateCfSummary() {
     ? `<div class="cf-summary-item"><span>🚚 Shipping</span><span style="color:#1B4332;font-size:13px;font-weight:600;">FREE</span></div>`
     : `<div class="cf-summary-item"><span>🚚 Shipping</span><span>₹${shipping}</span></div>`;
 
- console.log(document.getElementById('cfSummaryItems'));
-console.log(document.getElementById('cfTotalVal'));
-console.log(document.getElementById('cfPayBtnAmount'));
+  document.getElementById('cfSummaryItems').innerHTML = itemsHtml + shippingLine;
+  document.getElementById('cfTotalVal').textContent = '₹' + total.toLocaleString('en-IN');
+  document.getElementById('cfPayBtnAmount').textContent = total.toLocaleString('en-IN');
 
-document.getElementById('cfSummaryItems').innerHTML = itemsHtml + shippingLine;
-document.getElementById('cfTotalVal').textContent = '₹' + total.toLocaleString('en-IN');
-document.getElementById('cfPayBtnAmount').textContent = total.toLocaleString('en-IN');
 }
 
 function closeCfModal() {
