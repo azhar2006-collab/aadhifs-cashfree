@@ -59,6 +59,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Product Prices (server-side truth) ────────
 const PRICES = {
+   "Groundnut Oil 250ml": 82,
   'Groundnut Oil 500ml':  159,
   'Groundnut Oil 1L':     299,
   'Groundnut Oil 2L':     580,
