@@ -74,9 +74,9 @@ const PRICES = {
   'Coconut Oil 1L':       450,
   'Coconut Oil 2L':       880,
   'Coconut Oil 5L':      2150,
-  'Pure Ghee 250ml':      369,
-  'Pure Ghee 500ml':      699,
-  'Pure Ghee 1L':        1349,
+  'Pure Desi Ghee 250ml':      369,
+  'Pure Desi Ghee 500ml':      699,
+  'Pure Desi Ghee 1L':        1349,
 };
 
 // ── Shipping ──────────────────────────────────
