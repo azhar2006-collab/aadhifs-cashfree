@@ -1,0 +1,129 @@
+{
+  "products": [
+    {
+      "id": "p001",
+      "name": "Groundnut Oil",
+      "category": "Oils",
+      "emoji": "🥜",
+      "subtitle": "Cold Pressed · Chekku",
+      "description": "Pure wood-pressed groundnut oil, rich in natural nutrients and antioxidants. Cold-pressed using traditional chekku method — no heat, no chemicals.",
+      "image": "https://res.cloudinary.com/djmgorf8l/image/upload/f_auto,q_auto/ChatGPT_Image_Jun_11_2026_08_38_29_PM_cybsdq",
+      "variants": [
+        {
+          "size": "250ml",
+          "price": 82
+        },
+        {
+          "size": "500ml",
+          "price": 159
+        },
+        {
+          "size": "1L",
+          "price": 299
+        },
+        {
+          "size": "2L",
+          "price": 580
+        },
+        {
+          "size": "5L",
+          "price": 1400
+        }
+      ],
+      "inStock": true,
+      "featured": true
+    },
+    {
+      "id": "p002",
+      "name": "Gingelly Oil",
+      "category": "Oils",
+      "emoji": "🌿",
+      "subtitle": "Sesame / Til · Wood Pressed",
+      "description": "Traditional wood-pressed gingelly (sesame) oil. Rich in sesamin and vitamin E. Perfect for cooking, skin and hair care.",
+      "image": "https://res.cloudinary.com/djmgorf8l/image/upload/f_auto,q_auto/ChatGPT_Image_Jun_11_2026_08_38_50_PM_sdtuta",
+      "variants": [
+        {
+          "size": "250ml",
+          "price": 111
+        },
+        {
+          "size": "500ml",
+          "price": 219
+        },
+        {
+          "size": "1L",
+          "price": 420
+        },
+        {
+          "size": "2L",
+          "price": 820
+        },
+        {
+          "size": "5L",
+          "price": 2000
+        }
+      ],
+      "inStock": true,
+      "featured": true
+    },
+    {
+      "id": "p003",
+      "name": "Coconut Oil",
+      "category": "Oils",
+      "emoji": "🥥",
+      "subtitle": "Cold Pressed · Unrefined",
+      "description": "Pure cold-pressed coconut oil. Unrefined and unbleached — retains natural aroma and nutrients. Great for cooking and beauty.",
+      "image": "https://res.cloudinary.com/djmgorf8l/image/upload/f_auto,q_auto/ChatGPT_Image_Jun_11_2026_09_11_34_PM_qipxts",
+      "variants": [
+        {
+          "size": "250ml",
+          "price": 120
+        },
+        {
+          "size": "500ml",
+          "price": 239
+        },
+        {
+          "size": "1L",
+          "price": 450
+        },
+        {
+          "size": "2L",
+          "price": 880
+        },
+        {
+          "size": "5L",
+          "price": 2150
+        }
+      ],
+      "inStock": true,
+      "featured": true,
+      "updatedAt": "2026-09-15T14:34:38.611Z"
+    },
+    {
+      "id": "p004",
+      "name": "Pure Desi Ghee",
+      "category": "Ghee",
+      "emoji": "🫙",
+      "subtitle": "A2 Milk · Bilona Method",
+      "description": "Pure desi ghee made using the traditional Bilona method from A2 cow milk. Rich, golden and aromatic.",
+      "image": "https://res.cloudinary.com/djmgorf8l/image/upload/f_auto,q_auto/ChatGPT_Image_Jun_11_2026_09_26_43_PM_h0foj8",
+      "variants": [
+        {
+          "size": "250ml",
+          "price": 369
+        },
+        {
+          "size": "500ml",
+          "price": 699
+        },
+        {
+          "size": "1L",
+          "price": 1349
+        }
+      ],
+      "inStock": true,
+      "featured": true
+    }
+  ]
+}

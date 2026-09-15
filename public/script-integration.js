@@ -448,16 +448,25 @@ async function initiateCashfreePayment() {
     const createData = await createRes.json();
     if (!createData.success) throw new Error(createData.message || 'Order creation failed');
 
-    const { orderId, paymentSessionId, total } = createData;
+    const { orderId, paymentSessionId, total, isMock } = createData;
+
+    if (isMock) {
+      btn.innerHTML = '<div class="spinner"></div> Completing order…';
+      await new Promise(r => setTimeout(r, 1000));
+      await verifyPayment(orderId, customer, total);
+      return;
+    }
 
     await loadCashfreeSDK();
-    const cashfree = await Cashfree({ mode: getCashfreeMode() });
+    const cashfree = Cashfree({ mode: getCashfreeMode() });
     const result   = await cashfree.checkout({ paymentSessionId, redirectTarget: '_modal' });
 
-    if (result.error) throw new Error(result.error.message || 'Payment failed');
+    if (result.error) {
+      throw new Error(result.error.message || 'Payment was canceled or failed');
+    }
 
     if (result.paymentDetails) {
-      btn.innerHTML = '<div class="spinner"></div> Verifying…';
+      btn.innerHTML = '<div class="spinner"></div> Verifying payment…';
       await verifyPayment(orderId, customer, total);
     }
   } catch (err) {
@@ -590,3 +599,142 @@ function sendWhatsAppOrder() {}
 
 // ── Init ─────────────────────────────────────────────────────
 renderCart();
+loadStorefrontProducts();
+
+// ═════════════════════════════════════════════════════════════
+//  Dynamic Product Catalog Loader (from Admin / Backend)
+// ═════════════════════════════════════════════════════════════
+async function loadStorefrontProducts() {
+  try {
+    const res = await fetch('/api/products');
+    const data = await res.json();
+    if (!data.success || !data.products || data.products.length === 0) return;
+
+    renderDynamicProductCards(data.products);
+    renderDynamicPriceTable(data.products);
+  } catch (err) {
+    console.warn('Using static products as fallback:', err);
+  }
+}
+
+function renderDynamicProductCards(products) {
+  const grid = document.querySelector('#products .product-grid');
+  if (!grid) return;
+
+  const bgColors = ['#FDF5E0', '#FDF3E0', '#EEF8F0', '#FFF8E7', '#F0F9FF', '#FDF2F8'];
+
+  grid.innerHTML = products.map((p, idx) => {
+    const bg = bgColors[idx % bgColors.length];
+    const defaultVariant = (p.variants && p.variants.length > 0) ? p.variants[0] : { size: '1L', price: 0 };
+    const emoji = p.emoji || '🛢️';
+    const hasImage = !!p.image;
+
+    let imgHtml = '';
+    if (hasImage) {
+      imgHtml = `<img src="${p.image}" alt="${p.name}" class="product-img" style="object-fit:contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div style="display:none; font-size:64px; align-items:center; justify-content:center; height:100%;">${emoji}</div>`;
+    } else {
+      imgHtml = `<div style="font-size:64px; display:flex; align-items:center; justify-content:center; height:100%;">${emoji}</div>`;
+    }
+
+    // Variants dropdown
+    let variantSelectHtml = '';
+    if (p.variants && p.variants.length > 1) {
+      variantSelectHtml = `
+        <div style="margin: 8px 0;">
+          <select class="variant-select-dropdown" onchange="handleStoreVariantChange(this)" style="width:100%; padding:6px 10px; border:1px solid rgba(27,67,50,0.2); border-radius:6px; background:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; color:#1B4332; cursor:pointer;">
+            ${p.variants.map(v => `<option value="${v.size}" data-price="${v.price}">${v.size} — ₹${v.price}</option>`).join('')}
+          </select>
+        </div>
+      `;
+    }
+
+    const badgeStrip = p.subtitle ? `${p.name.toUpperCase()} · ${p.subtitle.toUpperCase()}` : `${p.name.toUpperCase()} · WOOD PRESSED`;
+
+    return `
+      <div class="product-card dynamic-prod-card"
+           data-name="${p.name} ${defaultVariant.size}"
+           data-base-name="${p.name}"
+           data-price="${defaultVariant.price}"
+           data-emoji="${emoji}">
+        <div class="product-badge-strip">${badgeStrip}</div>
+        <div class="product-img-wrap" style="background:${bg};">
+          ${imgHtml}
+          ${!p.inStock ? '<div style="position:absolute;top:10px;left:10px;background:#D9383A;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;z-index:3;">SOLD OUT</div>' : ''}
+          ${p.featured ? '<div style="position:absolute;top:10px;right:10px;background:#B8860B;color:#fff;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:4px;z-index:3;">FEATURED</div>' : ''}
+        </div>
+        <div class="product-info">
+          <div class="product-tags">
+            <span class="tag tag-green">${p.category || 'Wood Pressed'}</span>
+            <span class="tag tag-gold">100% Pure</span>
+          </div>
+          <div class="product-name">${p.name} — ${p.subtitle || 'Cold Pressed'}</div>
+          <div class="product-meta">${p.description ? p.description.slice(0, 65) + '...' : 'Traditional Chekku method'}</div>
+          ${variantSelectHtml}
+          <div class="product-pricing"><span class="price-current">₹${defaultVariant.price}</span></div>
+          <button class="add-to-cart" ${!p.inStock ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="addDynamicCardToCart(this)">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            ${p.inStock ? 'Add to cart' : 'Out of Stock'}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function handleStoreVariantChange(selectEl) {
+  const opt = selectEl.options[selectEl.selectedIndex];
+  const size = opt.value;
+  const price = parseInt(opt.dataset.price);
+  const card = selectEl.closest('.product-card');
+
+  card.dataset.name = `${card.dataset.baseName} ${size}`;
+  card.dataset.price = price;
+
+  const priceEl = card.querySelector('.price-current');
+  if (priceEl) priceEl.textContent = '₹' + price;
+}
+
+function addDynamicCardToCart(btn) {
+  const card = btn.closest('.product-card');
+  const name = card.dataset.name;
+  const price = parseInt(card.dataset.price);
+  const emoji = card.dataset.emoji;
+  addByName(name, price, emoji);
+}
+
+function renderDynamicPriceTable(products) {
+  const grid = document.querySelector('#prices .price-table-grid');
+  if (!grid) return;
+
+  grid.innerHTML = products.map(p => {
+    const emoji = p.emoji || '🛢️';
+    const rows = (p.variants || []).map(v => `
+      <div class="price-row">
+        <span class="price-qty">${v.size}</span>
+        <span class="price-amount">₹${v.price}</span>
+        <button class="price-add-btn"
+                ${!p.inStock ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}
+                onclick="addByName('${p.name} ${v.size}', ${v.price}, '${emoji}')">
+          ${p.inStock ? '+ Add' : 'Sold out'}
+        </button>
+      </div>
+    `).join('');
+
+    return `
+      <div class="price-oil-card">
+        <div class="price-oil-header">
+          <span class="price-oil-emoji">${emoji}</span>
+          <div>
+            <div class="price-oil-name">${p.name}</div>
+            <div class="price-oil-sub">${p.subtitle || p.category || 'Wood Pressed'}</div>
+          </div>
+        </div>
+        <div class="price-rows">
+          ${rows || '<div style="padding:10px; font-size:12px; color:#888;">No sizes available</div>'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
